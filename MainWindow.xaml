@@ -176,7 +176,7 @@
 
 
 
-            <TabItem Header="Orders" Margin="270.4,-2,-370,-0.2">
+            <TabItem Header="Orders" Margin="269.9,-2,-370,0">
                 <Grid DataContext="{StaticResource customerOrdersViewSource}" Margin="0,-2,0,2">
                     <Grid.Background>
                         <ImageBrush ImageSource="PopCorn0.jpg"/>
