@@ -18,7 +18,7 @@ using System.Data;
 
 namespace MovieShop
 {
-    
+
     enum ActionState
     {
         New,
@@ -26,8 +26,6 @@ namespace MovieShop
         Delete,
         Nothing
     }
-
-
     public partial class MainWindow : Window
     {
         ActionState action = ActionState.Nothing;
@@ -98,7 +96,7 @@ namespace MovieShop
 
             BindingOperations.ClearBinding(firstNameTextBox, TextBox.TextProperty);
             BindingOperations.ClearBinding(lastNameTextBox, TextBox.TextProperty);
-            SetValidationBinding();
+            
         }
 
         private void btnNew_Click(object sender, RoutedEventArgs e)
@@ -131,28 +129,27 @@ namespace MovieShop
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("now saving");
+            MessageBox.Show("Se initializeaza comanda");
             Customer customer = null;
             if (action == ActionState.New)
             {
-                MessageBox.Show("new");
+                MessageBox.Show("S-a Adaugat un client nou");
                 try
                 {
-                    //instantiem Customers
+                    
                     customer = new Customer()
                     {
                         CustId = int.Parse(custIdTextBox.Text.Trim()),
                         FirstName = firstNameTextBox.Text.Trim(),
                         LastName = lastNameTextBox.Text.Trim(),
-                        Age = ageTextBox.Text.Trim()
+                        Age = ageTextBox.Text.Trim(),
+                        Telephone = telephoneTextBox.Text.Trim()
 
                     };
 
-                    //adaugam entitatea nou creata in context
                     ctx.Customers.Add(customer);
                     customerViewSource.View.Refresh();
 
-                    //salvam modificarile
                     ctx.SaveChanges();
                 }
                 catch (DataException ex)
@@ -162,15 +159,15 @@ namespace MovieShop
             }
             else if (action == ActionState.Edit)
             {
-                MessageBox.Show("edit");
+                MessageBox.Show("Datele clientului au fost editate");
                 try
                 {
                     customer = (Customer)customerDataGrid.SelectedItem;
                     customer.FirstName = firstNameTextBox.Text.Trim();
                     customer.LastName = lastNameTextBox.Text.Trim();
                     customer.Age = ageTextBox.Text.Trim();
+                    customer.Telephone = telephoneTextBox.Text.Trim();
 
-                    //salvam modificarile
                     ctx.SaveChanges();
                 }
                 catch (DataException ex)
@@ -180,12 +177,11 @@ namespace MovieShop
 
                 customerViewSource.View.Refresh();
 
-                // pozitionarea pe item-ul curent
                 customerViewSource.View.MoveCurrentTo(customer);
             }
             else if (action == ActionState.Delete)
             {
-                MessageBox.Show("delete");
+                MessageBox.Show("Clientul a fost sters");
                 try
                 {
                     customer = (Customer)customerDataGrid.SelectedItem;
@@ -213,34 +209,29 @@ namespace MovieShop
             customerViewSource.View.MoveCurrentToPrevious();
         }
 
-
-
         // cod pt. Inventory/Movie
-
 
         private void btnSave1_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("now saving");
+            MessageBox.Show("Se initializeaza comanda");
             Inventory inventory = null;
             if (action == ActionState.New)
             {
-                MessageBox.Show("New");
+                MessageBox.Show("S-a Adaugat un film nou");
                 try
                 {
-                    //instantiem Inventory entity
                     inventory = new Inventory()
                     {
                         MovieId = int.Parse(movieIdTextBox.Text.Trim()),
                         MovieTitle = movietitleTextBox.Text.Trim(),
                         MovieFormat = movieformatTextBox.Text.Trim(),
-                        MoviePrice = moviepriceTextBox.Text.Trim()
+                        MoviePrice = moviepriceTextBox.Text.Trim(),
+                        MovieRating = movieratingTextBox.Text.Trim()
                     };
 
-                    //adaugam entitatea nou creata in context
                     ctx.Inventories.Add(inventory);
                     inventoryViewSource.View.Refresh();
 
-                    //salvam modificarile
                     ctx.SaveChanges();
                 }
                 catch (DataException ex)
@@ -250,7 +241,7 @@ namespace MovieShop
             }
             else if (action == ActionState.Edit)
             {
-                MessageBox.Show("Edit");
+                MessageBox.Show("Datele filmului au fost editate");
                 try
                 {
                     inventory = (Inventory)inventoryDataGrid.SelectedItem;
@@ -258,8 +249,8 @@ namespace MovieShop
                     inventory.MovieTitle = movietitleTextBox.Text.Trim();
                     inventory.MovieFormat = movieformatTextBox.Text.Trim();
                     inventory.MoviePrice = moviepriceTextBox.Text.Trim();
+                    inventory.MovieRating = movieratingTextBox.Text.Trim();
 
-                    //salvam modificarile
                     ctx.SaveChanges();
                 }
                 catch (DataException ex)
@@ -270,11 +261,11 @@ namespace MovieShop
                 inventoryViewSource.View.Refresh();
 
                 inventoryViewSource.View.MoveCurrentTo(inventory);
-                // pozitionarea pe item-ul curent
+            
             }
             else if (action == ActionState.Delete)
             {
-                MessageBox.Show("Delete");
+                MessageBox.Show("Filmul a fost sters");
                 try
                 {
                     inventory = (Inventory)inventoryDataGrid.SelectedItem;
@@ -301,31 +292,30 @@ namespace MovieShop
             inventoryViewSource.View.MoveCurrentToPrevious();
         }
 
-
         // cod pt. Orders
-
-
 
         private void btnSave2_Click(object sender, RoutedEventArgs e)
         {
+            MessageBox.Show("Se initializeaza comanda");
             Order order = null;
             if (action == ActionState.New)
             {
+                MessageBox.Show("S-a Adaugat o comanda noua");
                 try
                 {
                     Customer customer = (Customer)cmbCustomers.SelectedItem;
                     Inventory inventory = (Inventory)cmbInventory.SelectedItem;
-                    //instantiem Order entity
+                  
                     order = new Order()
                     {
 
                         CustId = customer.CustId,
                         MovieId = inventory.MovieId
                     };
-                    //adaugam entitatea nou creata in context
+                  
                     ctx.Orders.Add(order);
                     customerOrdersViewSource.View.Refresh();
-                    //salvam modificarile
+                   
                     ctx.SaveChanges();
                 }
                 catch (DataException ex)
@@ -339,13 +329,14 @@ namespace MovieShop
                 dynamic selectedOrder = ordersDataGrid.SelectedItem;
                 try
                 {
+                    MessageBox.Show("Datele comenzii au fost editate");
                     int curr_id = selectedOrder.OrderId;
                     var editedOrder = ctx.Orders.FirstOrDefault(s => s.OrderId == curr_id);
                     if (editedOrder != null)
                     {
                         editedOrder.CustId = Int32.Parse(cmbCustomers.SelectedValue.ToString());
                         editedOrder.MovieId = Convert.ToInt32(cmbInventory.SelectedValue.ToString());
-                        //salvam modificarile
+                       
                         ctx.SaveChanges();
                     }
                 }
@@ -354,7 +345,7 @@ namespace MovieShop
                     MessageBox.Show(ex.Message);
                 }
                 BindDataGrid();
-                // pozitionarea pe item-ul curent
+               
                 customerViewSource.View.MoveCurrentTo(selectedOrder);
             }
             else if (action == ActionState.Delete)
@@ -368,7 +359,7 @@ namespace MovieShop
                     {
                         ctx.Orders.Remove(deletedOrder);
                         ctx.SaveChanges();
-                        MessageBox.Show("Order Deleted Successfully", "Message");
+                        MessageBox.Show("Comanda a fost stearsa");
                         BindDataGrid();
                     }
                 }
@@ -377,8 +368,6 @@ namespace MovieShop
                     MessageBox.Show(ex.Message);
                 }
             }
-
-
 
         }
 
@@ -392,30 +381,6 @@ namespace MovieShop
             customerOrdersViewSource.View.MoveCurrentToPrevious();
         }
 
-
-        private void SetValidationBinding()
-        {
-            Binding firstNameValidationBinding = new Binding();
-            firstNameValidationBinding.Source = customerViewSource;
-            firstNameValidationBinding.Path = new PropertyPath("FirstName");
-            firstNameValidationBinding.NotifyOnValidationError = true;
-            firstNameValidationBinding.Mode = BindingMode.TwoWay;
-            firstNameValidationBinding.UpdateSourceTrigger =
-           UpdateSourceTrigger.PropertyChanged;
-            firstNameValidationBinding.ValidationRules.Add(new StringNotEmpty());
-            firstNameTextBox.SetBinding(TextBox.TextProperty,
-           firstNameValidationBinding);
-            Binding lastNameValidationBinding = new Binding();
-            lastNameValidationBinding.Source = customerViewSource;
-            lastNameValidationBinding.Path = new PropertyPath("LastName");
-            lastNameValidationBinding.NotifyOnValidationError = true;
-            lastNameValidationBinding.Mode = BindingMode.TwoWay;
-            lastNameValidationBinding.UpdateSourceTrigger =
-           UpdateSourceTrigger.PropertyChanged; 
-            lastNameValidationBinding.ValidationRules.Add(new StringMinLengthValidator());
-            lastNameTextBox.SetBinding(TextBox.TextProperty,
-           lastNameValidationBinding);
-        }
 
         private void customerDataGrid_SelectionChanged()
         {
