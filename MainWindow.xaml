@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MovieShop"
         xmlns:AutoLotModel="clr-namespace:AutoLotModel;assembly=AutoLotModel" x:Class="MovieShop.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="667.6" Width="1011.2" Loaded="Window_Loaded">
+        Title="MainWindow" Height="670.8" Width="1009.6" Loaded="Window_Loaded">
     <Window.Resources>
         <CollectionViewSource x:Key="customerViewSource" d:DesignSource="{d:DesignInstance {x:Type AutoLotModel:Customer}, CreateList=True}"/>
         <CollectionViewSource x:Key="inventoryViewSource" d:DesignSource="{d:DesignInstance {x:Type AutoLotModel:Inventory}, CreateList=True}"/>
@@ -31,7 +31,7 @@
     <Window.Background>
         <ImageBrush ImageSource="background.jpg"/>
     </Window.Background>
-    <Grid Margin="0,0,18,39.6">
+    <Grid Margin="0,0,-8.4,-10.8">
         <Grid.Background>
             <ImageBrush/>
         </Grid.Background>
